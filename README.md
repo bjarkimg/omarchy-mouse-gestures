@@ -13,7 +13,7 @@ Suggested upstream: https://github.com/omacom/omarchy/discussions/12580
 | Flick left | Alt+Left (back) |
 | Flick right | Alt+Right (forward) |
 | Flick up | Alt+Up (parent folder in Files) |
-| Flick down | Alt+Down |
+| Flick down | Ctrl+T (new tab) |
 | Down, then right (or ↘) | Ctrl+W (close tab) |
 | Down, then up | F5 (refresh) |
 | Click with almost no movement | Normal right-click menu |

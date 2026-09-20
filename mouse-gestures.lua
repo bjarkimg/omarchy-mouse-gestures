@@ -1,6 +1,7 @@
 -- Opera-style mouse gestures at the compositor.
--- Hold right mouse, flick, release. Cardinal flicks send Alt+Arrow (back /
--- forward / parent). Down-then-right (or a ↘ diagonal) sends Ctrl+W (close tab).
+-- Hold right mouse, flick, release. Left/right send Alt+Arrow (back/forward).
+-- Up sends Alt+Up (parent folder). Down sends Ctrl+T (new tab).
+-- Down-then-right (or a ↘ diagonal) sends Ctrl+W (close tab).
 -- Down-then-up sends F5 (refresh). Super+RMB still resizes windows.
 -- Games/fullscreen skip so RMB is not stolen. A click with almost no movement
 -- is replayed as RMB.
@@ -164,7 +165,9 @@ o.bind("mouse:273", "Mouse gesture", function()
 
   if math.abs(dx) >= math.abs(dy) then
     send_keys("ALT", dx < 0 and "left" or "right")
+  elseif dy < 0 then
+    send_keys("ALT", "up")
   else
-    send_keys("ALT", dy < 0 and "up" or "down")
+    send_keys("CTRL", "T")
   end
 end, { release = true, auto_consuming = true })
