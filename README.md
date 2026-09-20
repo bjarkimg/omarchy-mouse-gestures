@@ -15,6 +15,7 @@ Suggested upstream: https://github.com/omacom/omarchy/discussions/12580
 | Flick up | Alt+Up (parent folder in Files) |
 | Flick down | Alt+Down |
 | Down, then right (or ↘) | Ctrl+W (close tab) |
+| Down, then up | F5 (refresh) |
 | Click with almost no movement | Normal right-click menu |
 
 Super+right-click still resizes windows. Fullscreen and Steam games skip so RMB is not stolen.

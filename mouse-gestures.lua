@@ -1,8 +1,9 @@
 -- Opera-style mouse gestures at the compositor.
 -- Hold right mouse, flick, release. Cardinal flicks send Alt+Arrow (back /
 -- forward / parent). Down-then-right (or a ↘ diagonal) sends Ctrl+W (close tab).
--- Super+RMB still resizes windows. Games/fullscreen skip so RMB is not stolen.
--- A click with almost no movement is replayed as RMB.
+-- Down-then-up sends F5 (refresh). Super+RMB still resizes windows.
+-- Games/fullscreen skip so RMB is not stolen. A click with almost no movement
+-- is replayed as RMB.
 
 local THRESHOLD = 64
 local SEGMENT = 40
@@ -90,11 +91,8 @@ local function path_dirs(points)
   return dirs
 end
 
-local function is_down_right(dirs, dx, dy)
-  if dirs[1] == "down" and dirs[2] == "right" then
-    return true
-  end
-  return dx >= THRESHOLD and dy >= THRESHOLD
+local function path_starts(dirs, first, second)
+  return dirs[1] == first and dirs[2] == second
 end
 
 local function replay_right_click()
@@ -146,13 +144,21 @@ o.bind("mouse:273", "Mouse gesture", function()
 
   local dx = pos.x - start.x
   local dy = pos.y - start.y
-  if math.abs(dx) < THRESHOLD and math.abs(dy) < THRESHOLD then
-    replay_right_click()
+  local dirs = path_dirs(points)
+
+  -- Two-segment strokes first: down-up returns near the start, so it would
+  -- otherwise look like a click.
+  if path_starts(dirs, "down", "right") or (dx >= THRESHOLD and dy >= THRESHOLD) then
+    send_keys("CTRL", "W")
+    return
+  end
+  if path_starts(dirs, "down", "up") then
+    send_keys("", "F5")
     return
   end
 
-  if is_down_right(path_dirs(points), dx, dy) then
-    send_keys("CTRL", "W")
+  if math.abs(dx) < THRESHOLD and math.abs(dy) < THRESHOLD then
+    replay_right_click()
     return
   end
 
