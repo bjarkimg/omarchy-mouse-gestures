@@ -2,9 +2,9 @@
 -- Hold right mouse, flick, release. Left/right send Alt+Arrow (back/forward).
 -- Up sends Alt+Up (parent folder). Down sends Ctrl+T (new tab).
 -- Down-then-right (or a ↘ diagonal) sends Ctrl+W (close tab).
--- Down-then-up sends F5 (refresh). Super+RMB still resizes windows.
--- Games/fullscreen skip so RMB is not stolen. A click with almost no movement
--- is replayed as RMB.
+-- Up-then-down sends F5 (refresh). Up-then-right (or ↗) sends Ctrl+Shift+T
+-- (reopen last tab). Super+RMB still resizes windows. Games/fullscreen skip
+-- so RMB is not stolen. A click with almost no movement is replayed as RMB.
 
 local THRESHOLD = 64
 local SEGMENT = 40
@@ -147,14 +147,18 @@ o.bind("mouse:273", "Mouse gesture", function()
   local dy = pos.y - start.y
   local dirs = path_dirs(points)
 
-  -- Two-segment strokes first: down-up returns near the start, so it would
+  -- Two-segment strokes first: up-down returns near the start, so it would
   -- otherwise look like a click.
   if path_starts(dirs, "down", "right") or (dx >= THRESHOLD and dy >= THRESHOLD) then
     send_keys("CTRL", "W")
     return
   end
-  if path_starts(dirs, "down", "up") then
+  if path_starts(dirs, "up", "down") then
     send_keys("", "F5")
+    return
+  end
+  if path_starts(dirs, "up", "right") or (dx >= THRESHOLD and dy <= -THRESHOLD) then
+    send_keys("CTRL SHIFT", "T")
     return
   end
 
